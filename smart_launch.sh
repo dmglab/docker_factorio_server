@@ -8,24 +8,29 @@ then
     sleep 1
   done
 fi
-if [ -f /opt/factorio/saves/save.zip ]
+if [ "$FACTORIO_SAVEGAME" == false ]
 then
-  echo "###"
-  echo "# Using existing map [save.zip]"
-  echo "###"
-  echo "###"
-  echo "# Finding latest map"
-  echo "###"
-  last_save=$(ls /opt/factorio/saves -lt | grep save |head -1 |awk '{print $(NF)}')
+    if [ -f /opt/factorio/saves/save.zip ]
+    then
+      echo "###"
+      echo "# Using existing map [save.zip]"
+      echo "###"
+      echo "###"
+      echo "# Finding latest map"
+      echo "###"
+      last_save=$(ls /opt/factorio/saves -lt | grep save |head -1 |awk '{print $(NF)}')
+    else
+      echo "###"
+      echo "# Creating a new map [save.zip]"
+      echo "###"
+      /opt/factorio/bin/x64/factorio --create save.zip
+      last_save="save.zip"
+      echo "###"
+      echo "# New map created [save.zip]"
+      echo "###"
+    fi
 else
-  echo "###"
-  echo "# Creating a new map [save.zip]"
-  echo "###"
-  /opt/factorio/bin/x64/factorio --create save.zip
-  last_save="save.zip"
-  echo "###"
-  echo "# New map created [save.zip]"
-  echo "###"
+    last_save="$FACTORIO_SAVEGAME"
 fi
 
 # Checking options
